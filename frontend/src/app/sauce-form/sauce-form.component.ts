@@ -21,10 +21,10 @@ export class SauceFormComponent implements OnInit {
   imagePreview!: string;
 
   constructor(private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private sauces: SaucesService,
-    private auth: AuthService) { }
+              private route: ActivatedRoute,
+              private router: Router,
+              private sauces: SaucesService,
+              private auth: AuthService) { }
 
   ngOnInit() {
     this.loading = true;
@@ -59,7 +59,7 @@ export class SauceFormComponent implements OnInit {
       image: [null, Validators.required],
       mainPepper: [null, Validators.required],
       heat: [1, Validators.required],
-      heatValue: [{ value: 1, disabled: true }]
+      heatValue: [{value: 1, disabled: true}]
     });
     this.sauceForm.get('heat')!.valueChanges.subscribe(
       (value) => {
@@ -76,7 +76,7 @@ export class SauceFormComponent implements OnInit {
       image: [sauce.imageUrl, Validators.required],
       mainPepper: [sauce.mainPepper, Validators.required],
       heat: [sauce.heat, Validators.required],
-      heatValue: [{ value: sauce.heat, disabled: true }]
+      heatValue: [{value: sauce.heat, disabled: true}]
     });
     this.sauceForm.get('heat')!.valueChanges.subscribe(
       (value) => {
