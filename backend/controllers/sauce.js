@@ -110,30 +110,47 @@ exports.deleteSauce = (req, res, next) => {
 };
 
 exports.likeSauce = (req, res, next) => {
-  const { id } = req.params;
-  const { like } = req.body;
-  const sauce = ModelsSauce.findById(id);
-  if (like === 1) {
-    sauce.likes += 1;
-    sauce.usersLiked.push(req.body.userId);
-  } else if (like === -1) {
-    sauce.dislikes += 1;
-    sauce.usersDisliked.push(req.body.userId);
-  } else {
-    if (sauce.usersLiked.includes(req.body.userId)) {
-      sauce.likes -= 1;
-      sauce.usersLiked = sauce.usersLiked.filter(
-        (userId) => userId !== req.body.userId
-      );
-    } else if (sauce.usersDisliked.includes(req.body.userId)) {
-      sauce.dislikes -= 1;
-      sauce.usersDisliked = sauce.usersDisliked.filter(
-        (userId) => userId !== req.body.userId
-      );
-    }
+  let userId = req.body.userId;
+  let likeStatus = req.body.like;
+
+  if (likeStatus === 1) {
+    Sauce.updateOne(
+      { _id: req.params.id },
+      { $inc: { likes: 1 }, $push: { usersLiked: userId } }
+    )
+      .then(() => res.status(200).json({ message: "Like has been increased" }))
+      .catch((error) => res.status(400).json({ error }));
   }
-  sauce.save();
-  return res.status(200).json(sauce);
+  if (likeStatus === 0) {
+    Sauce.updateOne(
+      { _id: req.params.id },
+      { $inc: { likes: -1 }, $pull: { usersLiked: userId } }
+    )
+      .then(() => {
+        return Sauce.updateOne(
+          { _id: req.params.id },
+          { $inc: { dislikes: -1 }, $pull: { usersDisliked: userId } }
+        );
+      })
+      .then(() =>
+        res
+          .status(201)
+          .json({
+            message: ["Like has been cancelled", "Dislike has been cancelled"],
+          })
+      )
+      .catch((error) => res.status(400).json({ error }));
+  }
+  if (likeStatus === -1) {
+    Sauce.updateOne(
+      { _id: req.params.id },
+      { $inc: { dislikes: 1 }, $push: { usersDisliked: userId } }
+    )
+      .then(() =>
+        res.status(200).json({ message: "Dislike has been decreased" })
+      )
+      .catch((error) => res.status(400).json({ error }));
+  }
 };
 
 exports.getAllSauces = (req, res, next) => {
