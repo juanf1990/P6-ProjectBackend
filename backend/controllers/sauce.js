@@ -10,12 +10,12 @@ exports.createSauce = async (req, res, next) => {
       manufacturer: req.body.sauce.manufacturer,
       description: req.body.sauce.description,
       heat: req.body.sauce.heat,
-      likes: req.body.sauce.likes,
-      dislikes: req.body.sauce.dislikes,
+      likes: 0,
+      dislikes: 0,
       imageUrl: url + "/images/" + req.file.filename,
       mainPepper: req.body.sauce.mainPepper,
-      usersLiked: req.body.sauce.usersLiked,
-      usersDisliked: req.body.sauce.usersDisliked,
+      usersLiked: [],
+      usersDisliked: [],
       userId: req.body.sauce.userId,
     });
     await sauce.save();
