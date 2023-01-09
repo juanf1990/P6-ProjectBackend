@@ -1,3 +1,6 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 const express = require("express");
 
 const mongoose = require("mongoose");
@@ -29,7 +32,7 @@ app.use((req, res, next) => {
 
 mongoose
   .connect(
-    "mongodb+srv://admin:admin@cluster0.jti93xc.mongodb.net/?retryWrites=true&w=majority"
+    `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@cluster0.jti93xc.mongodb.net/?retryWrites=true&w=majority`
   )
   .then(() => {
     console.log("Successfully connected to MongoDB Atlas!");
