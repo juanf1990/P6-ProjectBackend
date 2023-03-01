@@ -4,7 +4,7 @@ import { Sauce } from '../models/Sauce.model';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 
-const ip = process.env.IP
+const ip = "https://p6-go-fullstack-production.up.railway.app"
 
 @Injectable({
   providedIn: 'root'
